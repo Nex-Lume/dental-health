@@ -336,10 +336,11 @@ function FloatingField({
         >
           {label}
         </label>
-        {React.cloneElement(children as React.ReactElement<FieldChildProps>, {
+        {React.cloneElement(children as React.ReactElement<FieldChildProps & { placeholder?: string }>, {
           onFocus, onBlur, onChange,
           className: 'w-full bg-transparent text-sm font-medium text-black outline-none resize-none pt-1',
           style: { position: 'relative', zIndex: 1 },
+          placeholder: isFloating ? (children.props as any).placeholder : '',
         })}
         <div
           ref={lineRef}
@@ -595,7 +596,12 @@ export default function ContactPage() {
     const errs: FormErrors = {};
     if (!form.name.trim() || form.name.trim().length < 2) errs.name = 'Name must be at least 2 characters.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Please enter a valid email address.';
-    if (form.phone && !/^\+?[\d\s\-().]{7,20}$/.test(form.phone)) errs.phone = 'Please enter a valid phone number.';
+    if (form.phone.trim()) {
+      const cleanedPhone = form.phone.replace(/[\s\-()]/g, '');
+      if (!/^(?:\+91|91|0)?[6-9]\d{9}$/.test(cleanedPhone)) {
+        errs.phone = 'Please enter a valid 10-digit Indian phone number.';
+      }
+    }
     if (!form.message.trim() || form.message.trim().length < 10) errs.message = 'Message must be at least 10 characters.';
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -606,7 +612,7 @@ export default function ContactPage() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3001/api/contacts', {
+      const res = await fetch('https://dental-mg8t.onrender.com/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -699,7 +705,7 @@ export default function ContactPage() {
           {/* ── MAP + GLASS CARD ─── */}
           <div
             ref={mapSectionRef}
-            className="relative mb-16 rounded-2xl overflow-hidden shadow-lg border border-neutral-100"
+            className="flex flex-col md:block relative mb-16 rounded-2xl overflow-hidden shadow-lg border border-neutral-100 bg-white"
             style={{ opacity: 0 }}
           >
             <div className="contact-map-frame relative w-full overflow-hidden" style={{ height: 'clamp(320px, 48vw, 500px)' }}>
@@ -717,8 +723,8 @@ export default function ContactPage() {
             {/* Glassmorphism card overlapping map */}
             <div
               ref={glassCardRef}
-              className="contact-glass absolute top-6 left-6 md:top-8 md:left-8 rounded-2xl p-5 md:p-6 z-20"
-              style={{ maxWidth: '290px', opacity: 0 }}
+              className="contact-glass relative md:absolute top-auto left-auto md:top-8 md:left-8 rounded-2xl p-5 md:p-6 z-20 m-4 md:m-0 w-[calc(100%-2rem)] md:w-[290px]"
+              style={{ opacity: 0 }}
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="relative w-2.5 h-2.5">
@@ -731,7 +737,7 @@ export default function ContactPage() {
               <div className="space-y-3.5">
                 <ContactDetail icon={<LocationIcon />} label="Address" value={"Suryakiran, Sector 5\nGhansoli, Navi Mumbai 400701"} />
                 <div className="contact-divider" />
-                <ContactDetail icon={<PhoneIcon />} label="Phone" value="+91 22 2778 0190" href="tel:+912227780190" />
+                <ContactDetail icon={<PhoneIcon />} label="Phone" value="+91 22 2551721" href="tel:+91222551721" />
                 <div className="contact-divider" />
                 <ContactDetail icon={<MailIcon />} label="Email" value="ghansoli@dentalhealth.com" href="mailto:ghansoli@dentalhealth.com" />
                 <div className="contact-divider" />
@@ -771,7 +777,7 @@ export default function ContactPage() {
                   </div>
                   <div className="mb-4">
                     <FloatingField label="Phone Number (optional)" error={errors.phone}>
-                      <input type="tel" value={form.phone} onChange={e => update('phone', e.target.value)} autoComplete="tel" />
+                      <input type="tel" value={form.phone} onChange={e => update('phone', e.target.value)} autoComplete="tel" placeholder="+91 98765 43210" />
                     </FloatingField>
                   </div>
                   <div className="mb-7">
@@ -808,9 +814,9 @@ export default function ContactPage() {
                 <p className="text-white/50 text-sm font-medium leading-relaxed mb-6">
                   Don't wait. We keep slots reserved for urgent dental care every single day.
                 </p>
-                <MagneticCTA variant="light" onClick={() => window.location.href = 'tel:+12015550190'}>
+                <MagneticCTA variant="light" onClick={() => window.location.href = 'tel:+91222551721'}>
                   <span className="flex items-center gap-2 text-black font-bold">
-                    <PhoneIcon size={13} /> Call Now — (201) 555-0190
+                    <PhoneIcon size={13} /> Call Now — +91 22 2551721
                   </span>
                 </MagneticCTA>
               </div>

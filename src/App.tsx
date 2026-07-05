@@ -424,7 +424,7 @@ function HomePage() {
               If you want a gorgeous smile,<br />call us to ask about a smile makeover.
             </div>
             <CallUsButton
-              onClick={() => window.location.href = 'tel:+12015550190'}
+              onClick={() => window.location.href = 'tel:+91222551721'}
               className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-10"
             />
           </MaskedCard>

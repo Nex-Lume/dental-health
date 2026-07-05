@@ -125,10 +125,10 @@ export default function PremiumFooter() {
 
       {/* Main Footer Grid */}
       <div className="relative z-10 max-w-6xl mx-auto w-full flex flex-col gap-10 md:gap-16">
-        
+
         {/* Top Header Row of Footer */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          
+
           {/* Logo & Headline */}
           <div ref={titleLeftRef} className="flex flex-col">
             <div className="flex flex-col mb-4">
@@ -181,13 +181,13 @@ export default function PremiumFooter() {
             <div className="flex flex-col gap-3.5 items-start text-sm font-semibold text-black">
               {/* Phone Link */}
               <a
-                href="tel:+12015550190"
+                href="tel:+91222551721"
                 className="group flex items-center text-sm font-semibold text-black hover:text-neutral-500 transition-colors"
               >
                 <span className="w-0 opacity-0 scale-75 group-hover:w-3.5 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out flex items-center justify-center overflow-hidden mr-0 group-hover:mr-2 text-neutral-400">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
                 </span>
-                <span>+1 (201) 555-0190</span>
+                <span>+91 22 2551721</span>
               </a>
 
               {/* Email Link */}
@@ -196,7 +196,7 @@ export default function PremiumFooter() {
                 className="group flex items-center text-sm font-semibold text-black hover:text-neutral-500 transition-colors"
               >
                 <span className="w-0 opacity-0 scale-75 group-hover:w-3.5 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out flex items-center justify-center overflow-hidden mr-0 group-hover:mr-2 text-neutral-400">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
                 </span>
                 <span>hello@dentalhealth.com</span>
               </a>
@@ -204,7 +204,7 @@ export default function PremiumFooter() {
               {/* Address detail */}
               <div className="group flex items-center text-sm font-medium text-neutral-500">
                 <span className="w-0 opacity-0 scale-75 group-hover:w-3.5 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out flex items-center justify-center overflow-hidden mr-0 group-hover:mr-2 text-neutral-400">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                 </span>
                 <span>123 Main St, West New York</span>
               </div>

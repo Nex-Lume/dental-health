@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const TEAM = [
@@ -8,21 +7,21 @@ const TEAM = [
     title: 'Lead Dentist & Implant Specialist',
     bio: '15 years of experience in dental implants and restorative dentistry. Graduated from NYU College of Dentistry.',
     specialties: ['Implants', 'Crowns', 'Restoration'],
-    initials: 'JC',
+    image: '/doctor-james-carter.png',
   },
   {
     name: 'Dr. Sarah Mills',
     title: 'Cosmetic Dentist',
     bio: 'Award-winning cosmetic dentist specializing in smile makeovers, veneers and teeth whitening transformations.',
     specialties: ['Veneers', 'Whitening', 'Smile Design'],
-    initials: 'SM',
+    image: '/doctor-sarah-mills.png',
   },
   {
     name: 'Dr. Aisha Khan',
     title: 'Orthodontist',
     bio: 'Expert in modern orthodontic solutions including traditional braces and clear aligner therapy for all ages.',
     specialties: ['Braces', 'Aligners', 'Orthodontics'],
-    initials: 'AK',
+    image: '/doctor-aisha-khan.png',
   },
 ];
 
@@ -51,16 +50,9 @@ export default function AboutPage() {
             </h1>
           </div>
           <div>
-            <p className="reveal text-base md:text-lg font-medium text-neutral-600 leading-relaxed mb-6" data-delay="120">
+            <p className="reveal text-base md:text-lg font-medium text-neutral-600 leading-relaxed" data-delay="120">
               Dental Health was founded with a single mission: to deliver world-class dental care in a warm, welcoming environment. We combine cutting-edge technology with compassionate care so every visit feels comfortable.
             </p>
-            <Link
-              to="/appointment"
-              className="reveal inline-block px-8 py-4 bg-black text-white rounded-full text-sm font-bold hover:bg-neutral-800 transition-colors duration-200"
-              data-delay="200"
-            >
-              Book Your Visit
-            </Link>
           </div>
         </div>
       </section>
@@ -107,16 +99,17 @@ export default function AboutPage() {
               <p className="reveal text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">The Team</p>
               <h2 className="reveal text-2xl md:text-4xl font-bold" data-delay="80">Meet Our Doctors</h2>
             </div>
-            <Link to="/appointment" className="hidden md:inline-block px-6 py-3 bg-black text-white rounded-full text-sm font-bold hover:bg-neutral-800 transition-colors">
-              Book Appointment
-            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             {TEAM.map((doctor, i) => (
               <div key={doctor.name} className="reveal bg-stone-50 rounded-2xl p-6 md:p-8 flex flex-col gap-5" data-delay={`${i * 100}`}>
                 {/* Avatar */}
-                <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center text-xl font-bold">
-                  {doctor.initials}
+                <div className="w-20 h-20 rounded-full overflow-hidden border border-neutral-200/60 bg-stone-100 flex-shrink-0">
+                  <img
+                    src={doctor.image}
+                    alt={doctor.name}
+                    className="w-full h-full object-cover grayscale transition-transform duration-300 hover:scale-105"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg md:text-xl font-bold text-black mb-1">{doctor.name}</h3>
@@ -132,11 +125,6 @@ export default function AboutPage() {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="mt-4 md:hidden">
-            <Link to="/appointment" className="block w-full py-4 bg-black text-white rounded-2xl text-sm font-bold text-center hover:bg-neutral-800 transition-colors">
-              Book Appointment
-            </Link>
           </div>
         </div>
       </section>

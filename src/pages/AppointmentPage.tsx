@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SERVICES = [
-  'Dental Veneers', 'Dental Crowns', 'Teeth Whitening', 'Dental Implants',
-  'Teeth Cleaning', 'Root Canal', 'Orthodontics', 'Emergency Care',
+  'General Dentistry', 'Dental Checkups', 'Teeth Cleaning', 'Teeth Whitening',
+  'Dental Fillings', 'Root Canal Treatment', 'Tooth Extraction',
+  'Dental Crowns & Bridges', 'Dental Implants', 'Orthodontics'
 ];
 
 const DOCTORS = ['Dr. James Carter', 'Dr. Sarah Mills', 'Dr. Aisha Khan'];
@@ -53,6 +54,8 @@ export default function AppointmentPage() {
   const [loading, setLoading] = useState(false);
   const [bookingId, setBookingId] = useState<number | null>(null);
 
+  const isStep2Complete = !!(form.service && form.date && form.time);
+
   function update(field: keyof FormData, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -64,8 +67,14 @@ export default function AppointmentPage() {
       errs.name = 'Name must be at least 2 characters.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
       errs.email = 'Please enter a valid email address.';
-    if (!/^\+?[\d\s\-().]{7,20}$/.test(form.phone))
-      errs.phone = 'Please enter a valid phone number.';
+    
+    const cleanedPhone = form.phone.replace(/[\s\-()]/g, '');
+    if (!cleanedPhone) {
+      errs.phone = 'Phone number is required.';
+    } else if (!/^(?:\+91|91|0)?[6-9]\d{9}$/.test(cleanedPhone)) {
+      errs.phone = 'Please enter a valid 10-digit Indian phone number.';
+    }
+    
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -73,7 +82,7 @@ export default function AppointmentPage() {
   function validateStep2(): boolean {
     const errs: FormErrors = {};
     if (!form.service) errs.service = 'Please select a service.';
-    if (!form.doctor) errs.doctor = 'Please select a doctor.';
+    // if (!form.doctor) errs.doctor = 'Please select a doctor.';
     if (!form.date) {
       errs.date = 'Please select a date.';
     } else {
@@ -97,10 +106,22 @@ export default function AppointmentPage() {
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3001/api/appointments', {
+      // Map frontend field names to the backend model field names
+      const payload = {
+        patientName: form.name,
+        email: form.email,
+        phone: form.phone,
+        selectedService: form.service,
+        // doctor: form.doctor,
+        appointmentDate: form.date,
+        appointmentTime: form.time,
+        notes: form.notes,
+      };
+
+      const res = await fetch('https://dental-mg8t.onrender.com/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success) {
@@ -147,21 +168,35 @@ export default function AppointmentPage() {
             {/* Info Cards */}
             <div className="flex flex-col gap-2">
               <div className="bg-stone-50 rounded-2xl p-5 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-lg">📞</div>
+                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </div>
                 <div>
                   <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Phone</p>
-                  <p className="text-sm font-bold">+1 (201) 555-0190</p>
+                  <p className="text-sm font-bold">+91 22 2551721</p>
                 </div>
               </div>
               <div className="bg-stone-50 rounded-2xl p-5 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-lg">📍</div>
+                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </div>
                 <div>
                   <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Location</p>
                   <p className="text-sm font-bold">123 Main Street, West New York, NJ</p>
                 </div>
               </div>
               <div className="bg-stone-50 rounded-2xl p-5 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-lg">🕐</div>
+                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                </div>
                 <div>
                   <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Hours</p>
                   <p className="text-sm font-bold">Mon–Fri 9am–6pm · Sat 9am–3pm</p>
@@ -186,7 +221,7 @@ export default function AppointmentPage() {
                   <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3">Booking Summary</p>
                   <DetailRow label="Booking ID" value={`#${bookingId}`} />
                   <DetailRow label="Service" value={form.service} />
-                  <DetailRow label="Doctor" value={form.doctor} />
+                  {/* <DetailRow label="Doctor" value={form.doctor} /> */}
                   <DetailRow label="Date" value={new Date(form.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} />
                   <DetailRow label="Time" value={form.time} />
                 </div>
@@ -204,9 +239,8 @@ export default function AppointmentPage() {
                 <div className="flex items-center gap-2 mb-1">
                   {[1, 2].map((s) => (
                     <React.Fragment key={s}>
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                        step === s ? 'bg-black text-white' : s < step ? 'bg-black text-white' : 'bg-neutral-200 text-neutral-400'
-                      }`}>
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === s ? 'bg-black text-white' : s < step ? 'bg-black text-white' : 'bg-neutral-200 text-neutral-400'
+                        }`}>
                         {s < step ? '✓' : s}
                       </div>
                       {s < 2 && <div className={`flex-1 h-0.5 rounded-full transition-all ${step > s ? 'bg-black' : 'bg-neutral-200'}`} />}
@@ -249,7 +283,7 @@ export default function AppointmentPage() {
                         type="tel"
                         value={form.phone}
                         onChange={(e) => update('phone', e.target.value)}
-                        placeholder="+1 (201) 555-0100"
+                        placeholder="+91 98765 43210"
                         className={inputClass(!!errors.phone)}
                       />
                     </Field>
@@ -276,6 +310,7 @@ export default function AppointmentPage() {
                         {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </Field>
+                    {/*
                     <Field label="Select Doctor *" error={errors.doctor}>
                       <select
                         value={form.doctor}
@@ -286,6 +321,7 @@ export default function AppointmentPage() {
                         {DOCTORS.map((d) => <option key={d} value={d}>{d}</option>)}
                       </select>
                     </Field>
+                    */}
                     <div className="grid grid-cols-2 gap-3">
                       <Field label="Date *" error={errors.date}>
                         <input
@@ -328,9 +364,22 @@ export default function AppointmentPage() {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="flex-1 py-4 bg-black text-white rounded-full text-sm font-bold hover:bg-neutral-800 transition-colors disabled:opacity-50"
+                        className="flex-1 relative overflow-hidden py-4 bg-black text-white rounded-full text-sm font-bold hover:bg-neutral-800 transition-colors disabled:opacity-50 inline-flex items-center justify-center min-h-[52px]"
                       >
-                        {loading ? 'Booking…' : 'Confirm Appointment'}
+                        {loading ? (
+                          <span>Scheduling…</span>
+                        ) : (
+                          <span className="relative flex items-center justify-center w-full h-full min-h-[20px]">
+                            {/* Book Appointment text (slides up when complete) */}
+                            <span className={`transition-all duration-300 ${isStep2Complete ? '-translate-y-[150%] opacity-0' : 'translate-y-0 opacity-100'}`}>
+                              Book Appointment
+                            </span>
+                            {/* Schedule text (slides up from below when complete) */}
+                            <span className={`absolute transition-all duration-300 ${isStep2Complete ? 'translate-y-0 opacity-100' : 'translate-y-[150%] opacity-0'}`}>
+                              Schedule
+                            </span>
+                          </span>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -345,7 +394,7 @@ export default function AppointmentPage() {
         <div className="border-t border-neutral-100 pt-8">
           <p className="text-xs text-neutral-400 font-medium text-center">
             Need urgent care? Call us directly at{' '}
-            <a href="tel:+12015550190" className="text-black font-bold hover:underline">+1 (201) 555-0190</a>
+            <a href="tel:+91222551721" className="text-black font-bold hover:underline">+91 22 2551721</a>
           </p>
         </div>
       </div>
@@ -366,9 +415,8 @@ function Field({ label, error, children }: { label: string; error?: string; chil
 }
 
 function inputClass(hasError: boolean) {
-  return `w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium text-black outline-none transition-all duration-200 focus:ring-2 focus:ring-black ${
-    hasError ? 'border-red-400 focus:ring-red-400' : 'border-neutral-200 focus:border-black'
-  }`;
+  return `w-full px-4 py-3 bg-white border rounded-xl text-sm font-medium text-black outline-none transition-all duration-200 focus:ring-2 focus:ring-black ${hasError ? 'border-red-400 focus:ring-red-400' : 'border-neutral-200 focus:border-black'
+    }`;
 }
 
 function DetailRow({ label, value }: { label: string; value: string }) {

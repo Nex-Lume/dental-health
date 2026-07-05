@@ -1160,7 +1160,7 @@ export default function ServiceDetailPage() {
                 <span className="inline-block transition-transform duration-300 group-hover:-translate-y-[150%]">
                   Ask a Question
                 </span>
-                <span className="absolute inline-block transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-white">
+                <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-white">
                   Get Answers
                 </span>
               </Link>
